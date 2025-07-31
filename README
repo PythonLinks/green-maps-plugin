@@ -1,0 +1,24 @@
+How it works:
+
+    Single Regex Pattern: /<a\b([^>]*?)href="([^"]*)"([^>]*)>/i
+
+        \<a\b : Matches <a with word boundary
+
+        ([^>]*?) : Captures attributes before href (non-greedy)
+
+        href="([^"]*)" : Captures the href value
+
+        ([^>]*) : Captures attributes after href
+
+        > : Matches the closing bracket
+
+    Replacement Logic:
+
+        $matches[1]: Attributes before href (preserved)
+
+        $matches[2]: Original slug (transformed)
+
+        $matches[3]: Attributes after href (preserved)
+
+        Reconstructs tag with transformed href while maintaining all other attributes
+
