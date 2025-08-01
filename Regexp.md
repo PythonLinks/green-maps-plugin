@@ -1,3 +1,9 @@
+
+
+
+
+
+
 How it works:
 
     Single Regex Pattern: /<a\b([^>]*?)href="([^"]*)"([^>]*)>/i
