@@ -52,6 +52,7 @@ function gpm_deactivate() {
 /**
  * Renders the map from remote site
  */
+import "replace.php";
 
 function gpm_render_map() {
     $url = 'https://GreenMaps.us/usa/content';
@@ -61,7 +62,9 @@ function gpm_render_map() {
         return '<p>Error loading map html fragment.</p>';
     }
     
-    return  wp_remote_retrieve_body($response);
+    $value = wp_remote_retrieve_body($response);
+    $value = replace_anchor_tags($value);
+    return $value;
     }
 
 /**
@@ -77,6 +80,8 @@ function gpm_inject_header_code() {
 
     // Include header.php from the current directory
     include __DIR__ . '/header.php';
+    <script>var wordPress = true;</scipt>
+    <!-- END Green Maps  Header -->
 }
 
 // Register hooks

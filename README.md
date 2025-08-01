@@ -26,3 +26,4 @@ your Plugin update functionality.
 
 There needs to be a way to add your own key, for example for a state party.
 
+Fix javascript mime types. 
