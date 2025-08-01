@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
      crossorigin=""/>
-  <link rel="stylesheet" href="/Products/OpenStreetMap/map.css" />
+  <link rel="stylesheet" href="https://GreenMaps.US/Products/OpenStreetMap/map.css" />
 
  <!-- Make sure you put this AFTER Leaflet's CSS -->
  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
@@ -18,4 +18,5 @@
      
 <script src="https://greenmaps.us/<?php echo $page_name;?>/localScripts"></script>
 <script src="https://greenmaps.us/Products/GeoJsonMap/geoScripts"></script>
+<script src="https://GreenMaps.us/Products/OpenStreetMap/openScripts"  ></script>
 
