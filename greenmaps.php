@@ -1,42 +1,38 @@
 <?php
 /**
  * Plugin Name: Green Party Maps
- * Description: Displays Green Party maps from data hosted at
- * https://GreenMaps.US
+ * Description: Displays Green Party maps from data hosted at https://GreenMaps.US
  * Version: 0.1
  * Author: Christopher Lozinski
- * License: GPL
- *
+ * License: GPLv2 or later
+ * Text Domain: green-party-maps
  */
 
+defined('ABSPATH') || exit;
+
+// Use consistent slug throughout
+define('GPM_PAGE_SLUG', 'green-maps');
 
 /**
  * Handles plugin activation
  */
 function gpm_activate() {
-
-    // Ensure the page exists and is published
-    $page_slug = 'green-maps';
-    $page = get_page_by_path($page_slug);
+    $page = get_page_by_path(GPM_PAGE_SLUG);
     
     if (!$page) {
-        // Create the page if it doesn't exist
         $page_data = array(
             'post_title'    => 'Green Party Maps',
-            'post_name'     => $page_slug,
+            'post_name'     => GPM_PAGE_SLUG,
             'post_content'  => '[green_party_maps]',
             'post_status'   => 'publish',
             'post_type'     => 'page'
         );
         wp_insert_post($page_data);
-    } else {
-        // Ensure existing page is published
-        if ($page->post_status !== 'publish') {
-            wp_update_post(array(
-                'ID' => $page->ID,
-                'post_status' => 'publish'
-            ));
-        }
+    } elseif ('publish' !== $page->post_status) {
+        wp_update_post(array(
+            'ID' => $page->ID,
+            'post_status' => 'publish'
+        ));
     }
 }
 
@@ -44,14 +40,8 @@ function gpm_activate() {
  * Handles plugin deactivation
  */
 function gpm_deactivate() {
-    // Remove shortcode
-    //remove_shortcode('green_party_maps');
-
-    $page_slug = 'green-maps';
-    $page = get_page_by_path($page_slug);
-    
-    if ($page) {
-        // Change page status to draft
+    $page = get_page_by_path(GPM_PAGE_SLUG);
+    if ($page && 'publish' === $page->post_status) {
         wp_update_post(array(
             'ID' => $page->ID,
             'post_status' => 'draft'
@@ -60,45 +50,37 @@ function gpm_deactivate() {
 }
 
 /**
- * Renders the map from remote data
+ * Renders the map from remote site
  */
+
 function gpm_render_map() {
-    $url = 'https://GreenMaps.us/usa/geojson';
+    $url = 'https://GreenMaps.us/usa/content';
     $response = wp_remote_get($url);
     
     if (is_wp_error($response)) {
-        return '<p>Error loading map data.</p>';
+        return '<p>Error loading map html fragment.</p>';
     }
     
-    $data = wp_remote_retrieve_body($response);
-    
-    // Return data in preformatted tag
-    return '<pre>' . esc_html($data) . '</pre>';
-}
+    return  wp_remote_retrieve_body($response);
+    }
 
 /**
  * Injects header code on map page
  */
+define('GPM_PAGE_SLUG', 'green-maps');
 function gpm_inject_header_code() {
-    if (is_page('green-party-maps')) {
-       include "header.html";
-    }
+    if (!is_page(GPM_PAGE_SLUG))
+       return "NO GREEN MAPS HEADER";
+
+    // Get page name from query var or default to 'usa'
+    $page_name = get_query_var('page-name') ?: 'usa';
+
+    // Include header.php from the current directory
+    include __DIR__ . '/header.php';
 }
 
-// Add header injection
-
-if (! has_action ('wp_head', 'gpm_inject_header_code')){
-      add_action ('wp_head', 'gpm_inject_header_code');
-}      
-    
-// Register shortcode
-if (! has_shortcode ('green_party_maps', 'gpm_render_map')){
-      add_shortcode ('green_party_maps', 'gpm_render_map');
-}
-//NEED TO CONDITIONALLY DO THIS
-// Register activation hook
+// Register hooks
+add_action('wp_head', 'gpm_inject_header_code');
+add_shortcode('green_party_maps', 'gpm_render_map');
 register_activation_hook(__FILE__, 'gpm_activate');
-
-// Register deactivation hook
 register_deactivation_hook(__FILE__, 'gpm_deactivate');
-
