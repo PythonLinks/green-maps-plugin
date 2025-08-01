@@ -1,5 +1,5 @@
 
-<!-- Local Header -->
+<!-- Green Maps  Header -->
 <script src="https://greenmaps.us/<?php echo $page_name; ?>/geojson/loadJSON"  ></script>
 <script src="https://greenmaps.us//<?php echo $page_name; ?>/outline"></script>
 <script src="https://greenmaps.us/<?php echo $page_name;?>/pins"></script>
@@ -17,4 +17,3 @@
      
 <script src="https://greenmaps.us/<?php echo $page_name;?>/localScripts"></script>
 <script src="https://greenmaps.us/Products/GeoJsonMap/geoScripts"></script>
-
