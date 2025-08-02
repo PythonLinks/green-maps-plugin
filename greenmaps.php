@@ -1,3 +1,4 @@
+
 <?php
 /**
  * Plugin Name: Green Party Maps
@@ -54,8 +55,17 @@ function gpm_deactivate() {
  */
 include "replace.php";
 
-function gpm_render_map() {
-    $url = 'https://GreenMaps.us/usa/content';
+function get_page_name() {
+    return isset($_GET['page-name']) 
+        ? sanitize_text_field($_GET['page-name']) 
+        : 'usa';
+}
+
+
+function gpm_render_map() {   
+
+    $url = "https://GreenMaps.us/" . get_page_name() .  "/content";
+   
     $response = wp_remote_get($url);
     
     if (is_wp_error($response)) {
@@ -63,8 +73,8 @@ function gpm_render_map() {
     }
     
     $value = wp_remote_retrieve_body($response);
-    $value = replace_anchor_tags($value);
-    return $value;
+    //$value = replace_anchor_tags($value);
+    return $value;    
     }
 
 /**
@@ -76,12 +86,13 @@ function gpm_inject_header_code() {
        return "NO GREEN MAPS HEADER";
 
     // Get page name from query var or default to 'usa'
-    $page_name = get_query_var('page-name') ?: 'usa';
+    $page_name = get_page_name();
 
     // Include header.php from the current directory
     include __DIR__ . '/header.php';
-    <script>var wordPress = true;</scipt>
-    <!-- END Green Maps  Header -->
+    echo "<script>var wordPress = true;</script>";
+    echo "<!-- End Green Maps  Header -->";
+
 }
 
 // Register hooks
