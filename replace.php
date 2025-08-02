@@ -14,7 +14,7 @@ function replace_anchor_tags($html) {
 
 // Example transformation function
 function transform_href($slug) {
-    return "/maps" . $slug;  // Customize this
+    return "/green-maps?page-name=" . $slug;  // Customize this/
 }
 
 ?>

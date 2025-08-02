@@ -52,7 +52,7 @@ function gpm_deactivate() {
 /**
  * Renders the map from remote site
  */
-import "replace.php";
+include "replace.php";
 
 function gpm_render_map() {
     $url = 'https://GreenMaps.us/usa/content';
