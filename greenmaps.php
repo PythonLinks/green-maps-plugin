@@ -1,4 +1,3 @@
-
 <?php
 /**
  * Plugin Name: Green Party Maps
@@ -50,11 +49,6 @@ function gpm_deactivate() {
     }
 }
 
-/**
- * Renders the map from remote site
- */
-include "replace.php";
-
 function get_page_name() {
     return isset($_GET['page-name']) 
         ? sanitize_text_field($_GET['page-name']) 
@@ -88,6 +82,7 @@ function gpm_inject_header_code() {
     // Get page name from query var or default to 'usa'
     $page_name = get_page_name();
 
+    
     // Include header.php from the current directory
     include __DIR__ . '/header.php';
     echo "<script>var wordPress = true;</script>";
@@ -96,7 +91,8 @@ function gpm_inject_header_code() {
 }
 
 // Register hooks
-add_action('wp_head', 'gpm_inject_header_code');
-add_shortcode('green_party_maps', 'gpm_render_map');
+    add_action('wp_head', 'gpm_inject_header_code');
+    add_shortcode('green_party_maps', 'gpm_render_map');
+
 register_activation_hook(__FILE__, 'gpm_activate');
 register_deactivation_hook(__FILE__, 'gpm_deactivate');
